@@ -26,7 +26,6 @@ export default function ExpenseEntryWriter({month,year}){
   
     const addItem = async (e) => {
       e.preventDefault();
-      console.log(confirmedRef,confirmedRef.current)
       await addDoc( collection(db, 'calendata'), {
           month:          month //~~monthRef.current?.value
         , year:           year  //~~yearRef.current?.value
