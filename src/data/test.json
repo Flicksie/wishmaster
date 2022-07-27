@@ -1,0 +1,42 @@
+{
+    "month_data":[
+        {
+            "year":2022,
+            "month": 5,
+            "in": [
+                {
+                    "title": "Item 1",
+                    "tags": [],
+                    "value": 1000,
+                    "confirmed": true
+                },
+                {
+                    "title": "Item 2",
+                    "tags": [],
+                    "value": 800,
+                    "confirmed": true
+                }
+            ],
+            "out": [
+                {
+                    "title": "Item 3",
+                    "tags": [],
+                    "value": 333,
+                    "confirmed": true
+                },
+                {
+                    "title": "Item 4",
+                    "tags": [],
+                    "value": 555,
+                    "confirmed": true
+                },
+                {
+                    "title": "Item 4",
+                    "tags": [],
+                    "value": 1000,
+                    "confirmed": false
+                }
+            ]
+        }
+    ]
+}
