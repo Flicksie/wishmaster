@@ -8,17 +8,16 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 import { db } from "../../data/firestore"
-import { useEffect } from 'react';
-import { useState } from 'react';
 
+import { useEffect, useState, useContext } from 'react';
 
+import { LocaleProvider } from "../../contexts/LocaleContext";
 
 
 // ### CALENDAR -----------------------------------------------------------------------
 
 function CalendarView({year}){
   
-  //const l = 0; // [Futureproof] locale support;
   const monthsRange =  Object.keys([...new Array(12)]).map(x=>~~x);
   year ??= new Date().getYear();
 
@@ -38,6 +37,7 @@ function CalendarView({year}){
 
 function CalendarMonth({month}){
 
+  const locale = useContext(LocaleProvider);
   const [entries, setEntries] = useState([]);
 
   useEffect(()=>{
@@ -52,7 +52,7 @@ function CalendarMonth({month}){
     return ()=> unsub();
   },[]);
 
-  const monthName = new Date(1,month,1).toLocaleString(0, { month: 'long' });
+  const monthName = new Date(1,month,1).toLocaleString(locale, { month: 'long' });
   const entriesFromThisMonth = entries.filter(entry=>entry.month === month);
   console.log({entriesFromThisMonth,month})
 
