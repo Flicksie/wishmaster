@@ -1,14 +1,15 @@
-import {useState,useContext,useEffect} from 'react';
+import {useState,useContext,useEffect,useRef} from 'react';
 import {query,collection,onSnapshot} from 'firebase/firestore';
 import {db} from '../data/firestore';
 import { LocaleProvider } from "../contexts/LocaleContext";
-import getRates from '../data/currencyRates';
+import CurrencyToken from './CurrencyToken';
 
-export default function CalendarMonth({ month, selectMonth }) {
+
+export default function CalendarMonth({ baseCurrency, currRates, month, selectMonth }) {
 	
 	const { locale } = useContext(LocaleProvider);
 	const [entries, setEntries] = useState([]);
-	const [currRates, setRates] = useState({loading:true});
+	
 
 	useEffect(() => {
 		const q = query(collection(db, "calendata"));
@@ -19,14 +20,10 @@ export default function CalendarMonth({ month, selectMonth }) {
 			});
 			setEntries(dbItems);
 		});
-
-		setTimeout(()=>{
-			getRates("PLN").then( rates => setRates({loading:false,rates}) )
-		},0) // testing async
-
 		return () => unsub();
 	}, []);
 
+	
 
 	const monthName = new Date(1, month, 1).toLocaleString(locale, {
 		month: "long",
@@ -34,7 +31,10 @@ export default function CalendarMonth({ month, selectMonth }) {
 	const entriesFromThisMonth = entries.filter((entry) => entry.month === month);
 
 
-	const reducer= (p, c) => p + (c.value || 0)  * currRates.rates?.[c.currency];
+	const reducer= (p, c) => {
+		//console.log( 1,c.currency, "are",1/currRates.rates?.[c.currency] ,baseCurrency, `( for [${c.value}])` )
+		return p + (c.value || 0)  / currRates.rates?.[c.currency];
+	}
 	const filterByType= (type) => (itm) => itm.confirmed && itm.type === type;
 
 
@@ -67,18 +67,22 @@ export default function CalendarMonth({ month, selectMonth }) {
 						<div className="month-body px-3 py-1">
 						<div className="justify-between flex">
 							<span className="font-light text-slate-700">Income:</span>
-							<span className="text-green-600">{month_total_in}</span>
+							<span className="text-green-600">
+								{month_total_in}<CurrencyToken {...{baseCurrency}}/>
+							</span>
 						</div>
 						<div className="justify-between flex">
 							<span className="font-light text-slate-700">Expenses:</span>
-							<span className="text-red-600">{month_total_out}</span>
+							<span className="text-red-600">
+								{month_total_out}<CurrencyToken {...{baseCurrency}}/>
+								</span>
 						</div>
 						<div className="justify-between flex">
 							<span className="font-light text-slate-700">Net Total:</span>
 							<span
 								className={net_total > 0 ? "text-emerald-700" : "text-red-700"}
 							>
-								{net_total}
+								{net_total}<CurrencyToken {...{baseCurrency}}/>
 							</span>
 						</div>
 					</div>
@@ -89,3 +93,4 @@ export default function CalendarMonth({ month, selectMonth }) {
 		</>
 	);
 }
+
