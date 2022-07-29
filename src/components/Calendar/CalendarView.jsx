@@ -32,8 +32,7 @@ export default function CalendarView({year}){
       <>
         <LocaleProvider.Provider value={{locale,setLocale}}>
 
-          <CurrencyPicker onChange={()=>setBaseCurrency(baseCurrencyRef.current.value)} ref={baseCurrencyRef} />
-          
+          <CurrencyPicker onChange={(curr)=>setBaseCurrency(curr)}  />
           <div className="calendar-body flex-wrap max-w-xl p-3">
             {
               monthsRange.map((month,i)=>  
