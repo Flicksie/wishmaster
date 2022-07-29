@@ -1,19 +1,15 @@
-import { forwardRef } from "react"
+import Dropdown from "./Dropdown";
+
 
 const availableCurrencies = [
     {label: "Polish Zloty", value: "PLN"},
     {label: "Brazilian Real", value: "BRL"},
+    {label: "Euro", value: "EUR"},
     {label: "US Dollar", value: "USD"},
 ]
 
- const CurrencyPicker = forwardRef( ({onChange, options = availableCurrencies}, ref) => {
-    return (
-        <select key={ref} {...{onChange,ref}} >
-            {options.map(({value,label,icon},key) =>
-                <option {...{key,value}}> {label} </option>
-            )}
-        </select>
+export default function CurrencyPicker({onChange})  {
+    return ( 
+        <Dropdown onChange={onChange} options={availableCurrencies}/>
     )
-})
-
-export default CurrencyPicker;
+}
