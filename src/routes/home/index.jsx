@@ -1,5 +1,6 @@
 import './main.css';
-import CalendarView from '../../components/CalendarView';
+import CalendarView from '../../components/Calendar/CalendarView';
+import Wishlist from '../../components/Wishlist/WishlistMain';
 
 function Home() {
 
@@ -10,6 +11,7 @@ function Home() {
       <section className="container-main">
         test
         <CalendarView />        
+        <Wishlist />        
       </section>
     </div>
   );
