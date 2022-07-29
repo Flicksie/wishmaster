@@ -1,7 +1,7 @@
-import {useState,useContext,useEffect,useRef} from 'react';
+import {useState,useContext,useEffect} from 'react';
 import {query,collection,onSnapshot} from 'firebase/firestore';
-import {db} from '../data/firestore';
-import { LocaleProvider } from "../contexts/LocaleContext";
+import {db} from '../../data/firestore';
+import { LocaleProvider } from "../../contexts/LocaleContext";
 import CurrencyToken from './CurrencyToken';
 
 
@@ -85,8 +85,7 @@ export default function CalendarMonth({ baseCurrency, currRates, month, selectMo
 								{net_total}<CurrencyToken {...{baseCurrency}}/>
 							</span>
 						</div>
-					</div>
-					
+					</div>					
 				}
 				
 			</div>

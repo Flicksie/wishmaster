@@ -1,9 +1,9 @@
-import {useState,useContext,useEffect} from 'react';
-import {query,collection,onSnapshot} from 'firebase/firestore';
-import {db} from '../data/firestore';
-import { LocaleProvider } from "../contexts/LocaleContext";
-
-import ExpenseEntryWriter from './ExpenseEntryWriter';
+import { useState, useContext, useEffect } from 'react';
+import { query, collection, onSnapshot } from 'firebase/firestore';
+import { db } from '../../data/firestore';
+import { LocaleProvider } from "../../contexts/LocaleContext";
+import ExpenseEntryWriter from '../Expenses/ExpenseEntryWriter';
+import ExpenseEntry from '../Expenses/ExpenseEntry';
 
 export default function MonthView({month,year}){
 
@@ -38,9 +38,7 @@ export default function MonthView({month,year}){
         </p>
         {
           entriesFromThisMonth.map((entry,i)=>
-            <p key={i}>
-              {entry.type} {entry.value} {entry.currency}
-            </p>
+            <ExpenseEntry { ...{ key:i, entry }}/>
           )
         }
       </>
