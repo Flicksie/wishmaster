@@ -1,26 +1,29 @@
-import {useRef} from 'react';
+import {useRef,useState} from 'react';
 import {db} from '../../data/firestore';
 import {addDoc,collection,updateDoc,doc,deleteDoc} from 'firebase/firestore'
+import CurrencyPicker from '../BasicUI/CurrencyPicker';
+import Dropdown from '../BasicUI/Dropdown';
+import ToggleSwitch from '../BasicUI/ToggleSwitch';
 
 export default function ExpenseEntryWriter({month,year}){
   
     //const monthRef = useRef(month);
     //const yearRef = useRef();
-    const typeRef = useRef();
+    const [type, setType]   = useState("expense");
     const valueRef = useRef();
     //const tagsRef = useRef();
-    const currencyRef = useRef();
-    const confirmedRef = useRef();
+    //const currencyRef = useRef();
+    const [currency, setCurrency]   = useState("PLN");
+    const [confirmed, setConfirmed] = useState(false);
     const descriptionRef = useRef();
   
     /*
     const [month, setMonth] = useState( _month || 0);
     const [year, setYear]   = useState( _year || new Date().getFullYear());
-    const [type, setType]   = useState("expense");
+    
     const [value, setValue] = useState(0);
     const [tags, setTags]   = useState([]);
-    const [currency, setCurrency]       = useState("PLN");
-    const [confirmed, setConfirmed]     = useState(false);
+    
     const [description, setDescription] = useState("");
     */
   
@@ -29,11 +32,11 @@ export default function ExpenseEntryWriter({month,year}){
       await addDoc( collection(db, 'calendata'), {
           month:          month //~~monthRef.current?.value
         , year:           year  //~~yearRef.current?.value
-        , type:           typeRef.current?.value
+        , type:           type
         , value:        ~~valueRef.current?.value
         //, tags:           tagsRef.current?.value
-        , currency:       currencyRef.current?.value
-        , confirmed:      confirmedRef.current?.checked
+        , currency:       currency
+        , confirmed:      confirmed
         , description:    descriptionRef.current?.value
       });
     }
@@ -51,21 +54,19 @@ export default function ExpenseEntryWriter({month,year}){
   
     return(
       <>
-        <form onSubmit={addItem}>
+        <form onSubmit={addItem} onChange={(e)=>console.log('wawa:',e )}>
           {/* month:          <input value={month} type="number"/> */}
           {/* year:           <input value={year} type="number"/> */}
-          type:           <select ref={typeRef}>
-            <option value="expense">Expense</option>
-            <option value="income">Income</option>
-          </select>
-          value:          <input ref={valueRef}  min="0" type="number"/>
+          type:            <Dropdown name="type" onChange={setType} options={[
+            {label:"Expense",value:"expense"},
+            {label:"Income",value:"income"}
+          ]}/>
+
+          value:          <input name="value"  ref={valueRef}  min="0" type="number"/>
           {/*tags:           <input ref={tagsRef}        type=""/> */}
-          currency:       <select ref={currencyRef}>
-            <option value="PLN">Polish Zloty</option>
-            <option value="USD">US Dollar</option>
-          </select>
-          confirmed:      <input ref={confirmedRef}   type="checkbox"/>
-          description:    <input ref={descriptionRef} type=""/>
+          currency:       <CurrencyPicker name="currency" onChange={ setCurrency } />
+          confirmed:      <ToggleSwitch  name="confirmed" onChange={ setConfirmed } />
+          description:    <input name="description"  ref={descriptionRef} type=""/>
           <button type="submit">WA</button>
         </form>
       </>
