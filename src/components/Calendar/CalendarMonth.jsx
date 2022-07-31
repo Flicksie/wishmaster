@@ -1,13 +1,15 @@
 import {useState,useContext,useEffect} from 'react';
 import {query,collection,onSnapshot} from 'firebase/firestore';
 import {db} from '../../data/firestore';
-import { LocaleProvider } from "../../contexts/LocaleContext";
+import { LocaleProvider } from '../../contexts/LocaleContext';
+import CurrencyContext from '../../contexts/CurrencyContext';
 import CurrencyToken from './CurrencyToken';
 
 
-export default function CalendarMonth({ baseCurrency, currRates, month, selectMonth }) {
+export default function CalendarMonth({ month, selectMonth }) {
 	
 	const { locale } = useContext(LocaleProvider);
+	const { baseCurrency, currencyRates } = useContext(CurrencyContext);
 	const [entries, setEntries] = useState([]);
 	
 
@@ -33,7 +35,7 @@ export default function CalendarMonth({ baseCurrency, currRates, month, selectMo
 
 	const reducer= (p, c) => {
 		//console.log( 1,c.currency, "are",1/currRates.rates?.[c.currency] ,baseCurrency, `( for [${c.value}])` )
-		return p + (c.value || 0)  / currRates.rates?.[c.currency];
+		return p + (c.value || 0)  / currencyRates.rates?.[c.currency];
 	}
 	const filterByType= (type) => (itm) => itm.confirmed && itm.type === type;
 
@@ -60,7 +62,7 @@ export default function CalendarMonth({ baseCurrency, currRates, month, selectMo
 					{" "}
 					{monthName}{" "}
 				</div>
-				{ currRates.loading 
+				{ currencyRates.loading 
 					? 
 						<> <div> Loading... </div> </> 
 					:						
