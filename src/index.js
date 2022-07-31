@@ -14,12 +14,12 @@ import './index.css';
 
 // ROUTES
 import Home from './routes/home';
-import Test from './routes/test';
+
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+
     <BrowserRouter>
       <div className="App">
         
@@ -30,7 +30,7 @@ root.render(
             
             <Route path="/" element = { <Home/> }/>
 
-            <Route path="/test" element = { <Test/> }/>
+            
 
             
           
@@ -41,7 +41,7 @@ root.render(
 
       </div>      
     </BrowserRouter>   
-  </React.StrictMode>
+
 );
 
 reportWebVitals();
