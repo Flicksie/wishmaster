@@ -136,10 +136,13 @@ export function Authentication(){
 
     return (
         <>
+ 
         {
             authenticated 
-            ? <button onClick={()=> localSignOut(UserDataCtx)}> [[ SIGN OUT ]]  </button> 
-            : <button onClick={()=> popAuthenticate(UserDataCtx)}> [[ SIGN IN ]]  </button> 
+            ? <button className="btn danger" onClick={()=> localSignOut(UserDataCtx)}> SIGN OUT </button> 
+            : <button className="btn github" onClick={()=> popAuthenticate(UserDataCtx)}>
+                 SIGN IN
+              </button>
         }
         </>
     )
