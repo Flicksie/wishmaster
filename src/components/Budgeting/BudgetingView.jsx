@@ -35,8 +35,8 @@ export default function BudgetingView({year,selectedMonth,selectMonth,monthsRang
 
 			<div className="calendar-body flex-wrap max-w-xl p-3">
 				{
-				monthsRange.map((month,i)=>
-					<CalendarMonth key={i}  month={month} year={year} selectMonth={selectMonth} />
+				monthsRange.map((monthName,i)=>
+					<CalendarMonth key={i}  month={monthName} year={year} selectedMonth={selectedMonth} selectMonth={selectMonth} />
 				)
 				}
 			</div>
