@@ -11,7 +11,6 @@ import { LocaleProvider } from '../../contexts/LocaleContext';
 import getRates from '../../data/currencyRates';
 import Dropdown from '../../components/BasicUI/Dropdown';
 
-import { Authentication } from '../../data/AuthManager';
 import { useContext } from 'react';
 import { UserData } from '../../contexts/UserData';
 
@@ -27,6 +26,8 @@ function Home() {
   console.log(UserDataCtx)
   const {baseCurrency, setBaseCurrency,locale,setLocale} = UserDataCtx;
 
+console.log({setBaseCurrency})
+
   const [currencyRates, setRates] = useState({loading:true});
 
   
@@ -37,7 +38,7 @@ function Home() {
   
   const updateCurrencyRates = (base) => getRates(base).then( rates => setRates({loading:false,rates}) );
   
-  useEffect(() => {
+  useEffect(() => { 
     setTimeout(()=>{
       updateCurrencyRates(baseCurrency)
     },0) // testing async
@@ -51,9 +52,9 @@ function Home() {
         <div className="App">
           <header className="App-header">
 
-            <Authentication />            
-            <CurrencyPicker onChange={ setBaseCurrency }  placeholder="Select base currency..." />
-            <Dropdown onChange={selectMonth} options={ monthsRange.map(m => ({ value:m, label: new Date(1,m,1).toLocaleString(locale,{month:"long"}) }))}/>
+                    
+            <CurrencyPicker onChange={ setBaseCurrency } value={baseCurrency} placeholder="Select base currency..." />
+            <Dropdown onChange={ selectMonth } value={selectedMonth} options={ monthsRange.map(m => ({ value:m, label: new Date(1,m,1).toLocaleString(locale,{month:"long"}) }))} />
 
           </header>
           <section className="container-main">
