@@ -3,8 +3,12 @@ import { createContext, useState } from "react";
 export const UserData = createContext({ 
     id: "",
     setID: () => {},
-    preferredCurrency: "PLN",
-    setPrefCurrency: () => {},
+    name: "",
+    setName: () => {},
+    avatar: "",
+    setAvatar: () => {},
+    baseCurrency: "PLN",
+    setBaseCurrency: () => {},
     myBalance: 0,
     setMyBalance: () => {},
     theme: "default",
@@ -29,7 +33,9 @@ export const UserData = createContext({
  function UserDataProvider({children}) {
 
     const [id, setID] = useState();
-    const [preferredCurrency, setPreferredCurrency] = useState("PLN");
+    const [name, setName] = useState();
+    const [avatar, setAvatar] = useState();
+    const [baseCurrency, setBaseCurrency] = useState("PLN");
     const [myBalance, setMyBalance] = useState(0);
     const [theme, setTheme] = useState("default");
     const [myLocale, setMyLocale] = useState("en");
@@ -48,7 +54,9 @@ export const UserData = createContext({
             {
                 //params
                 id,
-                preferredCurrency,
+                name,
+                setName,
+                baseCurrency,
                 myBalance,
                 theme,
                 myLocale,
@@ -61,7 +69,9 @@ export const UserData = createContext({
                 
                 //setters
                 setID,
-                setPreferredCurrency,
+                avatar,
+                setAvatar,
+                setBaseCurrency,
                 setMyBalance,
                 setTheme,
                 setMyLocale,
