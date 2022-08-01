@@ -1,7 +1,7 @@
 import './main.css';
 import { useState, useEffect } from 'react';
 
-import CalendarView from '../../components/Calendar/CalendarView';
+import Budgeting from '../../components/Budgeting/BudgetingView';
 import Wishlist from '../../components/Wishlist/WishlistMain';
 
 import CurrencyContext from '../../contexts/CurrencyContext';
@@ -14,6 +14,9 @@ import Dropdown from '../../components/BasicUI/Dropdown';
 import { Authentication } from '../../data/AuthManager';
 import { useContext } from 'react';
 import { UserData } from '../../contexts/UserData';
+
+
+
 
 function Home() {
 
@@ -46,18 +49,19 @@ function Home() {
       
         
         <div className="App">
-          <header className="App-header"> 
-          <Authentication></Authentication>
-          
-          <CurrencyPicker onChange={ setBaseCurrency }  placeholder="Select base currency..." />
-          <Dropdown onChange={selectMonth} options={ monthsRange.map(m => ({ value:m, label: new Date(1,m,1).toLocaleString(locale,{month:"long"}) }))}/>          
+          <header className="App-header">
+
+            <Authentication />            
+            <CurrencyPicker onChange={ setBaseCurrency }  placeholder="Select base currency..." />
+            <Dropdown onChange={selectMonth} options={ monthsRange.map(m => ({ value:m, label: new Date(1,m,1).toLocaleString(locale,{month:"long"}) }))}/>
+
           </header>
           <section className="container-main">
-                  
-            <CalendarView { ...{selectedMonth,selectMonth,monthsRange,year} }/>
-            <Wishlist />
 
             
+            <Budgeting { ...{selectedMonth,selectMonth,monthsRange,year} }/>
+            <Wishlist />
+
                     
           </section>
         </div>

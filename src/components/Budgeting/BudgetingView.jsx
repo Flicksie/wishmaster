@@ -8,7 +8,7 @@ import {db} from '../../data/firestore';
 import { UserData } from '../../contexts/UserData';
 
 
-export default function CalendarView({year,selectedMonth,selectMonth,monthsRange}){
+export default function BudgetingView({year,selectedMonth,selectMonth,monthsRange}){
 
 	const {
 		id: userID,
