@@ -1,7 +1,9 @@
 import './main.css';
+import { useState, useEffect } from 'react';
+
 import CalendarView from '../../components/Calendar/CalendarView';
 import Wishlist from '../../components/Wishlist/WishlistMain';
-import { useState, useEffect } from 'react';
+
 import CurrencyContext from '../../contexts/CurrencyContext';
 import CurrencyPicker from '../../components/BasicUI/CurrencyPicker';  
 import { LocaleProvider } from '../../contexts/LocaleContext';
@@ -9,12 +11,19 @@ import { LocaleProvider } from '../../contexts/LocaleContext';
 import getRates from '../../data/currencyRates';
 import Dropdown from '../../components/BasicUI/Dropdown';
 
+import { Authentication } from '../../data/AuthManager';
+import { useContext } from 'react';
+import { UserData } from '../../contexts/UserData';
+
 function Home() {
 
   const [screen,setScreen] = useState("WISHLIST");
 
-  const [locale,setLocale] = useState();
-  const [baseCurrency, setBaseCurrency] = useState("PLN");
+  const UserDataCtx = useContext(UserData);
+
+  console.log(UserDataCtx)
+  const {baseCurrency, setBaseCurrency,locale,setLocale} = UserDataCtx;
+
   const [currencyRates, setRates] = useState({loading:true});
 
   
@@ -38,6 +47,7 @@ function Home() {
         
         <div className="App">
           <header className="App-header"> 
+          <Authentication></Authentication>
           
           <CurrencyPicker onChange={ setBaseCurrency }  placeholder="Select base currency..." />
           <Dropdown onChange={selectMonth} options={ monthsRange.map(m => ({ value:m, label: new Date(1,m,1).toLocaleString(locale,{month:"long"}) }))}/>          
