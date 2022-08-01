@@ -4,6 +4,7 @@ import {db} from './firestore'
 import { useContext } from "react";
 
 import {UserData} from "../contexts/UserData";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export const getUser = (userID) => {
     const q = query( collection(db, "userdata"), where("id","==", userID) );
@@ -43,7 +44,7 @@ const updateUserField = (docID,fields) => {
 
 export const updateUser = async (userdata_in) => {
     const d = {
-        preferredCurrency: userdata_in.preferredCurrency,
+        baseCurrency: userdata_in.baseCurrency,
         myBalance: userdata_in.myBalance,
         theme: userdata_in.theme,
         myLocale: userdata_in.myLocale,
@@ -76,12 +77,14 @@ export const popAuthenticate = (userContext) => {
                 console.log("User Found!");
 
                 userContext.setID(uid);
-                if (userDocData.preferredCurrency)  userContext.setPreferredCurrency( userDocData.preferredCurrency );
+                if (userDocData.baseCurrency)  userContext.setBaseCurrency( userDocData.baseCurrency );
                 if (userDocData.myBalance)          userContext.setMyBalance( userDocData.myBalance );
                 if (userDocData.theme)              userContext.setTheme( userDocData.theme );
                 if (userDocData.myLocale)           userContext.setMyLocale( userDocData.myLocale );
                 if (userDocData.myCurrencies)       userContext.setMyCurrencies( userDocData.myCurrencies );
                 if (userDocData.dbDocID)            userContext.setDbDocID( userDocData.dbDocID );
+                if (userDocData.avatar)             userContext.setAvatar( userDocData.avatar );
+                if (userDocData.name)               userContext.setName( userDocData.name );
 
 
             }).catch(err=>{
@@ -114,7 +117,7 @@ export const localSignOut = async (userContext) => {
 
     //with(userContext){
 
-        userContext.setPreferredCurrency("PLN");
+        userContext.setBaseCurrency("PLN");
         userContext.setMyBalance(0);
         userContext.setTheme("default");
         userContext.setMyLocale("en");
@@ -136,13 +139,20 @@ export function Authentication(){
 
     return (
         <>
- 
         {
             authenticated 
-            ? <button className="btn danger" onClick={()=> localSignOut(UserDataCtx)}> SIGN OUT </button> 
+            ? <button className="btn danger" onClick={()=> localSignOut(UserDataCtx)}>
+                <FontAwesomeIcon icon="fa-arrow-right-from-bracket" />
+                <span className="px-3" >
+                    SIGN OUT
+                </span>
+            </button> 
             : <button className="btn github" onClick={()=> popAuthenticate(UserDataCtx)}>
-                 SIGN IN
-              </button>
+                <FontAwesomeIcon icon="fab fa-github"/>
+                <span className="px-3" >
+                    SIGN IN
+                </span>
+            </button>
         }
         </>
     )
