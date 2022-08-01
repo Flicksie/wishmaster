@@ -1,36 +1,19 @@
-import {useState,useContext,useEffect} from 'react';
-import {query,collection,onSnapshot} from 'firebase/firestore';
-import {db} from '../../data/firestore';
-import { LocaleProvider } from '../../contexts/LocaleContext';
+import {useContext} from 'react';
 import CurrencyContext from '../../contexts/CurrencyContext';
 import CurrencyToken from './CurrencyToken';
+import { UserData } from '../../contexts/UserData';
 
 
 export default function CalendarMonth({ month, selectMonth }) {
 	
-	const { locale } = useContext(LocaleProvider);
 	const { baseCurrency, currencyRates } = useContext(CurrencyContext);
-	const [entries, setEntries] = useState([]);
+	const { myExpenses, locale } = useContext(UserData);
 	
-
-	useEffect(() => {
-		const q = query(collection(db, "calendata"));
-		const unsub = onSnapshot(q, (querySnapshot) => {
-			let dbItems = [];
-			querySnapshot.forEach((doc) => {
-				dbItems.push({ ...doc.data(), id: doc.id });
-			});
-			setEntries(dbItems);
-		});
-		return () => unsub();
-	}, []);
-
 	
-
 	const monthName = new Date(1, month, 1).toLocaleString(locale, {
 		month: "long",
 	});
-	const entriesFromThisMonth = entries.filter((entry) => entry.month === month);
+	const entriesFromThisMonth = myExpenses.filter((entry) => entry.month === month);
 
 
 	const reducer= (p, c) => {
