@@ -1,6 +1,8 @@
 import {useRef} from 'react';
 import {db} from '../../data/firestore';
 import {addDoc,collection,updateDoc,doc,deleteDoc} from 'firebase/firestore'
+import { useContext } from 'react';
+import { UserData } from '../../contexts/UserData';
 
 export default function WishlistEntryWriter({month,year}){
   
@@ -23,6 +25,7 @@ export default function WishlistEntryWriter({month,year}){
     const [description, setDescription] = useState("");
     */
   
+    const UserDataCtx = useContext(UserData);
 
     const consolidateData = ()=>{
         return {
@@ -33,6 +36,7 @@ export default function WishlistEntryWriter({month,year}){
           , description:    descriptionRef.current?.value
           , details:        detailsRef.current?.value
           , acquired:       acquiredRef.current?.checked
+          , user_uid:       UserDataCtx.id
         }
     }
 

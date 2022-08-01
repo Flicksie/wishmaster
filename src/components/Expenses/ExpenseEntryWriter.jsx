@@ -4,6 +4,8 @@ import {addDoc,collection,updateDoc,doc,deleteDoc} from 'firebase/firestore'
 import CurrencyPicker from '../BasicUI/CurrencyPicker';
 import Dropdown from '../BasicUI/Dropdown';
 import ToggleSwitch from '../BasicUI/ToggleSwitch';
+import { useContext } from 'react';
+import { UserData } from '../../contexts/UserData';
 
 export default function ExpenseEntryWriter({month,year}){
   
@@ -26,6 +28,8 @@ export default function ExpenseEntryWriter({month,year}){
     
     const [description, setDescription] = useState("");
     */
+
+    const UserDataCtx = useContext(UserData);
   
     const addItem = async (e) => {
       e.preventDefault();
@@ -38,6 +42,7 @@ export default function ExpenseEntryWriter({month,year}){
         , currency:       currency
         , confirmed:      confirmed
         , description:    descriptionRef.current?.value
+        , user_uid:       UserDataCtx.id
       });
     }
   
