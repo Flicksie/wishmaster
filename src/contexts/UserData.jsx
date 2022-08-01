@@ -1,6 +1,6 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useState } from "react";
 
-const UserData = createContext({ 
+export const UserData = createContext({ 
     id: "",
     setID: () => {},
     preferredCurrency: "PLN",
@@ -13,16 +13,35 @@ const UserData = createContext({
     setMyLocale: () => {},
     myCurrencies: ["BRL","EUR","PLN","USD"],
     setMyCurrencies: () => {},
+    
+    myWishlist: [ ],
+    myExpenses: [ ],
+    setMyWishlist: () => {},
+    setMyExpenses: () => {},
+
+    dbDocID: "",
+    setDbDocID: () => {},
+    authenticated: false,
+    authenticate: () => {},
+
  });
 
  function UserDataProvider({children}) {
 
     const [id, setID] = useState();
-    const [preferredCurrency, setPreferredCurrency] = useState();
-    const [myBalance, setMyBalance] = useState();
-    const [theme, setTheme] = useState();
-    const [myLocale, setMyLocale] = useState();
-    const [myCurrencies, setMyCurrencies] = useState();
+    const [preferredCurrency, setPreferredCurrency] = useState("PLN");
+    const [myBalance, setMyBalance] = useState(0);
+    const [theme, setTheme] = useState("default");
+    const [myLocale, setMyLocale] = useState("en");
+    const [myCurrencies, setMyCurrencies] = useState( ["BRL","EUR","PLN","USD"] );
+    
+    const [myWishlist, setMyWishlist] = useState([ ]);
+    const [myExpenses, setMyExpenses] = useState([ ]);
+    
+    const [dbDocID, setDbDocID] = useState();
+    const [authenticated, authenticate] = useState(false);
+
+
 
     return (
         <UserData.Provider value={
@@ -33,7 +52,12 @@ const UserData = createContext({
                 myBalance,
                 theme,
                 myLocale,
-                myCurrencies,
+                myCurrencies,                
+                myWishlist,
+                myExpenses,
+
+                dbDocID,
+                authenticated,
                 
                 //setters
                 setID,
@@ -42,6 +66,11 @@ const UserData = createContext({
                 setTheme,
                 setMyLocale,
                 setMyCurrencies,
+                setMyWishlist,                
+                setMyExpenses,
+
+                setDbDocID,
+                authenticate,                
             }
         }>
             {children}
