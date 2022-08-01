@@ -6,7 +6,7 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
-
+import UserDataProvider from './contexts/UserData';
 
 // STYLE
 import './index.css';
@@ -19,28 +19,29 @@ import Home from './routes/home';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-
-    <BrowserRouter>
-      <div className="App">
-        
-        <nav> *Nav goes here* </nav> 
-        
-        <div className="content">
-          <Routes>
-            
-            <Route path="/" element = { <Home/> }/>
-
-            
-
-            
+    <UserDataProvider>
+      <BrowserRouter>
+        <div className="App">
           
-          </Routes>
-        </div>
+          <nav> *Nav goes here* </nav> 
+          
+          <div className="content">
+            <Routes>
+              
+              <Route path="/" element = { <Home/> }/>
 
-        <footer> *Footer goes here?* </footer> 
+              
 
-      </div>      
-    </BrowserRouter>   
+              
+            
+            </Routes>
+          </div>
+
+          <footer> *Footer goes here?* </footer> 
+
+        </div>      
+      </BrowserRouter>   
+    </UserDataProvider>
 
 );
 
