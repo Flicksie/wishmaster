@@ -1,12 +1,20 @@
-
-import { useState, useContext, useEffect } from 'react';
-import { query, collection, onSnapshot, addDoc, updateDoc,doc } from 'firebase/firestore';
-import { db } from '../../data/firestore';
 import WishlistEntryWriter from './WishlistEntryWriter';
 
-export default function Wishlist (){
-    const [entries, setEntries] = useState([]);
+import { useContext, useEffect } from 'react';
 
+import { query, collection, onSnapshot, addDoc, updateDoc,doc, where } from 'firebase/firestore';
+import { db } from '../../data/firestore';
+
+import { UserData } from '../../contexts/UserData';
+
+
+export default function Wishlist (){
+
+    const { 
+        id: userID,
+        myWishlist,
+        setMyWishlist,
+    } = useContext(UserData);
 
     const commitPurchase = async (item) => {
         const timestamp = new Date();
@@ -29,16 +37,18 @@ export default function Wishlist (){
       }
   
     useEffect(()=>{
-      const q = query(collection(db,"wishlist"));
-      const unsub = onSnapshot(q,(querySnapshot)=>{
-        let dbItems=[];
-        querySnapshot.forEach(doc => {
-          dbItems.push({...doc.data(), id: doc.id})
-        })
-        setEntries(dbItems);
-      });
-      return ()=> unsub();
-    },[]);
+        if (!userID) return setMyWishlist([]);
+
+        const q = query(collection(db,"wishlist"), where("user_uid","==",userID));
+        const unsub = onSnapshot(q,(querySnapshot)=>{
+            let dbItems=[];
+            querySnapshot.forEach(doc => {
+                dbItems.push({...doc.data(), id: doc.id})
+            })
+            setMyWishlist(dbItems);
+        });
+        return ()=> unsub();
+    },[setMyWishlist, userID]);
 
     return (
         <>
@@ -56,7 +66,7 @@ export default function Wishlist (){
                     </tr>
                 </thead>
                 <tbody>
-                    {entries.map((entry,i) => 
+                    {(myWishlist||[]).map((entry,i) => 
                         <tr key={i}>
                             <td>{entry.name}</td>
                             <td>{entry.price}</td>
