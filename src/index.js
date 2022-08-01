@@ -8,14 +8,22 @@ import {
 } from "react-router-dom";
 import UserDataProvider from './contexts/UserData';
 
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { fas } from '@fortawesome/free-solid-svg-icons'
+import { faGithub } from '@fortawesome/free-brands-svg-icons'
+
+import { Authentication } from './data/AuthManager'
+
 // STYLE
 import './index.css';
 
 
 // ROUTES
 import Home from './routes/home';
+import Navbar from './components/Navbar';
 
 
+library.add(fas, faGithub)
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -23,7 +31,7 @@ root.render(
       <BrowserRouter>
         <div className="App">
           
-          <nav> *Nav goes here* </nav> 
+          <Navbar/>
           
           <div className="content">
             <Routes>
