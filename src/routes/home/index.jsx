@@ -1,4 +1,3 @@
-import './main.css';
 import { useState, useEffect } from 'react';
 
 import Budgeting from '../../components/Budgeting/BudgetingView';
