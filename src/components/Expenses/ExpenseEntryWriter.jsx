@@ -6,17 +6,22 @@ import Dropdown from '../BasicUI/Dropdown';
 import ToggleSwitch from '../BasicUI/ToggleSwitch';
 import { useContext } from 'react';
 import { UserData } from '../../contexts/UserData';
+import PriceInput from '../BasicUI/PriceInput';
 
 export default function ExpenseEntryWriter({month,year}){
   
     //const monthRef = useRef(month);
     //const yearRef = useRef();
     const [type, setType]   = useState("expense");
+    const [amount, setAmount]   = useState(0);
     const valueRef = useRef();
+    const endMonthRef = useRef();
+    const endYearRef = useRef();
     //const tagsRef = useRef();
     //const currencyRef = useRef();
     const [currency, setCurrency]   = useState("PLN");
     const [confirmed, setConfirmed] = useState(false);
+    const [recurring, setRecurring] = useState(false);
     const descriptionRef = useRef();
   
     /*
@@ -33,17 +38,22 @@ export default function ExpenseEntryWriter({month,year}){
   
     const addItem = async (e) => {
       e.preventDefault();
-      await addDoc( collection(db, 'calendata'), {
+      const form = {
           month:          month //~~monthRef.current?.value
         , year:           year  //~~yearRef.current?.value
         , type:           type
-        , value:        ~~valueRef.current?.value
+        , value:        ~~amount
         //, tags:           tagsRef.current?.value
         , currency:       currency
         , confirmed:      confirmed
-        , description:    descriptionRef.current?.value
+        , recurring:      recurring
+        , description:    descriptionRef.current?.value || ""
         , user_uid:       UserDataCtx.id
-      });
+        , endMonth:     ~~(endMonthRef.current?.value )|| null
+        , endYear:      ~~(endYearRef.current?.value  )|| null
+      };
+
+      await addDoc( collection(db, 'calendata'), form);
     }
   
   
@@ -67,10 +77,19 @@ export default function ExpenseEntryWriter({month,year}){
             {label:"Income",value:"income"}
           ]}/>
 
-          value:          <input name="value"  ref={valueRef}  min="0" type="number"/>
+          value:          <PriceInput onChange={setAmount} value={amount} currency={currency} />
           {/*tags:           <input ref={tagsRef}        type=""/> */}
           currency:       <CurrencyPicker name="currency" onChange={ setCurrency } />
           confirmed:      <ToggleSwitch  name="confirmed" onChange={ setConfirmed } />
+          recurring:      <ToggleSwitch  name="recurring" onChange={ setRecurring } />
+          {
+            recurring 
+            ? <>
+                month:          <input ref={endMonthRef} type="number"/>
+                year:           <input ref={endYearRef} type="number"/>
+            </>
+            : ""
+          }
           description:    <input name="description"  ref={descriptionRef} type=""/>
           <button type="submit">WA</button>
         </form>
