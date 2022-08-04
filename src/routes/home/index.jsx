@@ -23,11 +23,7 @@ function Home() {
 
   const UserDataCtx = useContext(UserData);
 
-  console.log(UserDataCtx)
   const {baseCurrency, setBaseCurrency,locale,setLocale} = UserDataCtx;
-
-console.log({setBaseCurrency})
-
   const [currencyRates, setRates] = useState({loading:true});
 
   
@@ -54,6 +50,7 @@ console.log({setBaseCurrency})
 
                     
             <CurrencyPicker onChange={ setBaseCurrency } value={baseCurrency} placeholder="Select base currency..." />
+            <Dropdown onChange={ setYear } value={year} options={ [ 2022, 2023, 2024, 2025] } />
             <Dropdown onChange={ selectMonth } value={selectedMonth} options={ monthsRange.map(m => ({ value:m, label: new Date(1,m,1).toLocaleString(locale,{month:"long"}) }))} />
 
           </header>
