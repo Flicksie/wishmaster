@@ -12,6 +12,9 @@ import { CheckIcon,SelectorIcon } from '@heroicons/react/solid'
 
 export default function Dropdown({onChange, value, placeholder, options = []})  {
     
+    // For array of labels that are also values, convert to objects
+    if (options[0] && (typeof options[0] !== 'object' && !options[0].value) ) options = options.map(o=> ({value:o,label:o}) );
+
     const [select,setSelect] = useState(options[0]);
     const handleChange = (e) => {
         console.log(e,onChange)
@@ -22,10 +25,10 @@ export default function Dropdown({onChange, value, placeholder, options = []})  
     const labelSync = (options?.find(o=>o.value === value))?.label || select.label || "N/A"
 
     return ( 
-        <div className=" inline-block top-16 w-72">
+        <div className=" inline-block top-16 m-2">
             <Listbox value={select} onChange={handleChange} >
                 <div className="relative mt-1">
-                    <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
+                    <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
                         <span className="block truncate">{ labelSync ||placeholder}</span>
                         <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                             <SelectorIcon
@@ -43,7 +46,7 @@ export default function Dropdown({onChange, value, placeholder, options = []})  
                         leaveFrom="transform scale-100 opacity-100"
                         leaveTo="transform scale-95 opacity-0"
                     >
-                        <Listbox.Options className="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                        <Listbox.Options className="absolute z-50 mt-1 max-h-60 w-[calc(100%+5rem)] overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                         {options.map((item,key) =>
                             <Listbox.Option 
                                 className={({ active }) =>
