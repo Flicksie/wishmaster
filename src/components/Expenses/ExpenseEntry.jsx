@@ -1,7 +1,7 @@
-export default function ExpenseEntry ({entry}) {
+export default function ExpenseEntry ({entry,year, month}) {
   return (
-    <p>
-      {entry.type} {entry.value} {entry.currency}
+    <p className="p-1 border">
+      {entry.recurring ? `<< ends in ${entry.endMonth}/${entry.endYear} >>` :""} {entry.type} {entry.value} {entry.currency} <br/>
     </p>
   )
 };
