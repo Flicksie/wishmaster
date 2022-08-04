@@ -1,18 +1,23 @@
-import {useRef} from 'react';
 import {db} from '../../data/firestore';
 import {addDoc,collection,updateDoc,doc,deleteDoc} from 'firebase/firestore'
-import { useContext } from 'react';
+import { useContext, useState, useRef } from 'react';
 import { UserData } from '../../contexts/UserData';
+
+import CurrencyPicker from '../BasicUI/CurrencyPicker';
+import PriorityPicker from '../BasicUI/PriorityPicker';
+import Button from '../BasicUI/Button';
+import CurrToken from '../Budgeting/CurrencyToken';
+import PriceInput from '../BasicUI/PriceInput';
+
 
 export default function WishlistEntryWriter({month,year}){
   
-    const priorityRef    = useRef();
+    const priceRef    = useRef();
     const nameRef        = useRef();
-    const currencyRef    = useRef();
-    const priceRef       = useRef();
+ 
     const descriptionRef = useRef();
     const detailsRef     = useRef();
-    const acquiredRef    = useRef();
+
   
     /*
     const [month, setMonth] = useState( _month || 0);
@@ -20,22 +25,34 @@ export default function WishlistEntryWriter({month,year}){
     const [type, setType]   = useState("expense");
     const [value, setValue] = useState(0);
     const [tags, setTags]   = useState([]);
-    const [currency, setCurrency]       = useState("PLN");
     const [confirmed, setConfirmed]     = useState(false);
-    const [description, setDescription] = useState("");
     */
+
+
+   const [priority, setPriority] = useState(1);
+   const [currency, setCurrency] = useState("PLN");
+   const [price, setPrice] = useState(0);
+   const [isValid, setValid] = useState(false);
+   
+
+   const validatePrice = (e) => {
+      const priceIn = e.target.value;
+      const isValid =  ~~priceIn > 0;
+      if (isValid || priceIn === "")  setPrice( ~~priceIn || "" );
+      else return false;
+      return true;
+    }
   
     const UserDataCtx = useContext(UserData);
 
     const consolidateData = ()=>{
         return {
-            priority:     ~~priorityRef.current?.value
+            priority:       priority
           , name:           nameRef.current?.value
-          , currency:       currencyRef.current?.value
-          , price:          priceRef.current?.value
-          , description:    descriptionRef.current?.value
-          , details:        detailsRef.current?.value
-          , acquired:       acquiredRef.current?.checked
+          , currency:       currency
+          , price:          price
+          , description:    descriptionRef.current?.value || ""
+          , details:        detailsRef.current?.value || ""
           , user_uid:       UserDataCtx.id
         }
     }
@@ -59,33 +76,21 @@ export default function WishlistEntryWriter({month,year}){
         <form onSubmit={addItem}>
           {/* month:          <input value={month} type="number"/> */}
           {/* year:           <input value={year} type="number"/> */}
-          priority:           <select ref={priorityRef}>
-            <option value="1">(1) High</option>
-            <option value="2">(2) </option>
-            <option value="3">(3) </option>
-            <option value="4">(4) </option>
-            <option value="5">(5) </option>
-            <option value="6">(6) </option>
-            <option value="7">(7) </option>
-            <option value="8">(8) </option>
-            <option value="9">(9) </option>
-            <option value="10">(10) Low)</option>
-          </select>
-          price:          <input ref={priceRef}  min="0" type="number"/>
+          priority:           <PriorityPicker onChange={setPriority} value={priority} />
+
+          price:          <PriceInput validate={ validatePrice } onChange={ setPrice } value={ price } currency={ currency } placeholder='Price'/>
+            
+            
+
           {/*tags:           <input ref={tagsRef}        type=""/> */}
-          currency:       <select ref={currencyRef}>
-            <option value="PLN">Polish Zloty</option>
-            <option value="USD">US Dollar</option>
-            <option value="BRL">Brazilian Real</option>
-          </select>
-          acquired:      <input ref={acquiredRef}   type="checkbox"/>
+          currency:       <CurrencyPicker value={currency}  onChange={ setCurrency } />
           description:    <input ref={descriptionRef} type=""/>
           name:    <input ref={nameRef} type=""/>
-          <button type="submit">WAWA</button>
+
+          <Button disabled={ ~~price <= 0 } icon="fa-paper-plane" color="info" type="submit">WAWA</Button>
         </form>
       </>
-    )
-  
+    )  
   
   }
   
