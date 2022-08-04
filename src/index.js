@@ -12,7 +12,6 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 
-import { Authentication } from './data/AuthManager'
 
 // STYLE
 import './index.css';
