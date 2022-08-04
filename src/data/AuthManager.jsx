@@ -1,10 +1,11 @@
-import { getAuth, signOut, signInWithPopup, GithubAuthProvider } from "firebase/auth";
+import { getAuth, signOut, signInWithPopup, GithubAuthProvider, setPersistence, browserLocalPersistence, onAuthStateChanged } from "firebase/auth";
 import {addDoc,updateDoc,doc,deleteDoc,query,collection,where,getDocs} from 'firebase/firestore'
 import {db} from './firestore'
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 
 import {UserData} from "../contexts/UserData";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { useRef } from "react";
 
 export const getUser = (userID) => {
     const q = query( collection(db, "userdata"), where("id","==", userID) );
@@ -57,40 +58,47 @@ export const updateUser = async (userdata_in) => {
     await updateDoc( doc(db, 'userdata', userdata_in.dbDocID), d);
 }
 
-const provider = new GithubAuthProvider();
+
 const auth = getAuth();
+
+export const consolidateUser = (user,uCtx   ) => {
+
+    const {uid} = user;
+    return getUser(uid).then(userDocData=>{
+        // morestuff
+        console.log("User Found!");
+
+        uCtx.setID(uid);
+        if (userDocData.baseCurrency)  uCtx.setBaseCurrency( userDocData.baseCurrency );
+        if (userDocData.myBalance)          uCtx.setMyBalance( userDocData.myBalance );
+        if (userDocData.theme)              uCtx.setTheme( userDocData.theme );
+        if (userDocData.myLocale)           uCtx.setMyLocale( userDocData.myLocale );
+        if (userDocData.myCurrencies)       uCtx.setMyCurrencies( userDocData.myCurrencies );
+        if (userDocData.dbDocID)            uCtx.setDbDocID( userDocData.dbDocID );
+        if (userDocData.avatar)             uCtx.setAvatar( userDocData.avatar );
+        if (userDocData.name)               uCtx.setName( userDocData.name );
+
+
+    }).catch(err=>{
+        console.warn(err);
+        registerUser( user )
+    });
+}
 
 export const popAuthenticate = (userContext) => {
 
-    return signInWithPopup(auth, provider)
+    return setPersistence(auth, browserLocalPersistence).then( ()=> {
+        const provider = new GithubAuthProvider();
+
+        return signInWithPopup(auth, provider)
         .then( async (result) => {
             // This gives you a GitHub Access Token. You can use it to access the GitHub API.
             const credential = GithubAuthProvider.credentialFromResult(result);
             const token = credential.accessToken;
             // The signed-in user info.
             const user = result.user;
-
-            const {uid,displayName,photoURL} = user;
-
-            const response = await getUser(uid).then(userDocData=>{
-                // morestuff
-                console.log("User Found!");
-
-                userContext.setID(uid);
-                if (userDocData.baseCurrency)  userContext.setBaseCurrency( userDocData.baseCurrency );
-                if (userDocData.myBalance)          userContext.setMyBalance( userDocData.myBalance );
-                if (userDocData.theme)              userContext.setTheme( userDocData.theme );
-                if (userDocData.myLocale)           userContext.setMyLocale( userDocData.myLocale );
-                if (userDocData.myCurrencies)       userContext.setMyCurrencies( userDocData.myCurrencies );
-                if (userDocData.dbDocID)            userContext.setDbDocID( userDocData.dbDocID );
-                if (userDocData.avatar)             userContext.setAvatar( userDocData.avatar );
-                if (userDocData.name)               userContext.setName( userDocData.name );
-
-
-            }).catch(err=>{
-                console.warn(err);
-                registerUser( user )
-            });
+            
+            await consolidateUser( user, userContext );
 
 
             userContext.authenticate(true);
@@ -105,7 +113,8 @@ export const popAuthenticate = (userContext) => {
             // The AuthCredential type that was used.
             const credential = GithubAuthProvider.credentialFromError(error);
         // ...
-        });
+        })
+    });
   
 }
 
@@ -136,6 +145,29 @@ export const localSignOut = async (userContext) => {
 export function Authentication(){
     const UserDataCtx = useContext(UserData);
     const {authenticated, authenticate} = UserDataCtx;
+
+    let mounted = useRef(false);
+
+    useEffect(() => {
+        mounted.current = true;
+        const unsub = onAuthStateChanged(auth, (user) => {
+          if (user) {
+            if (mounted.current) {
+                consolidateUser(user,UserDataCtx);
+                authenticate(true);
+            }
+          } else {
+            if (mounted.current) authenticate(false);
+          }
+        });
+    
+        return () => {
+          mounted.current = false;
+          unsub();
+        };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+      
 
     return (
         <>
