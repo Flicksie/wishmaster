@@ -1,7 +1,7 @@
-export default function CurrToken({baseCurrency}){
+export default function CurrToken({children}){
 	return(
 		<span className='ml-1 align-center inline text-xs opacity-60'>
-			{baseCurrency}
+			{children}
 		</span>
 	)
 }

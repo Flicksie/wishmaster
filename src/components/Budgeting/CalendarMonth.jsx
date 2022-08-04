@@ -2,9 +2,10 @@ import {useContext} from 'react';
 import CurrencyContext from '../../contexts/CurrencyContext';
 import CurrencyToken from './CurrencyToken';
 import { UserData } from '../../contexts/UserData';
+import { activeInMonth } from '../../data/calendarOperations';
 
 
-export default function CalendarMonth({ month, selectMonth, selectedMonth }) {
+export default function CalendarMonth({ year, month, selectMonth, selectedMonth }) {
 	
 	const { baseCurrency, currencyRates } = useContext(CurrencyContext);
 	const { myExpenses, locale } = useContext(UserData);
@@ -13,7 +14,9 @@ export default function CalendarMonth({ month, selectMonth, selectedMonth }) {
 	const monthName = new Date(1, month, 1).toLocaleString(locale, {
 		month: "long",
 	});
-	const entriesFromThisMonth = myExpenses.filter((entry) => entry.month === month);
+
+
+	const entriesFromThisMonth = myExpenses.filter( (entry) => activeInMonth(entry,year,month) );
 
 
 	const reducer= (p, c) => {
@@ -53,13 +56,13 @@ export default function CalendarMonth({ month, selectMonth, selectedMonth }) {
 						<div className="justify-between flex">
 							<span className="font-light text-slate-700">Income:</span>
 							<span className="text-green-600">
-								{month_total_in}<CurrencyToken {...{baseCurrency}}/>
+								{month_total_in}<CurrencyToken>{ baseCurrency }</CurrencyToken>
 							</span>
 						</div>
 						<div className="justify-between flex">
 							<span className="font-light text-slate-700">Expenses:</span>
 							<span className="text-red-600">
-								{month_total_out}<CurrencyToken {...{baseCurrency}}/>
+								{month_total_out}<CurrencyToken>{ baseCurrency }</CurrencyToken>
 								</span>
 						</div>
 						<div className="justify-between flex">
@@ -67,7 +70,7 @@ export default function CalendarMonth({ month, selectMonth, selectedMonth }) {
 							<span
 								className={net_total > 0 ? "text-emerald-700" : "text-red-700"}
 							>
-								{net_total}<CurrencyToken {...{baseCurrency}}/>
+								{net_total}<CurrencyToken>{ baseCurrency }</CurrencyToken>
 							</span>
 						</div>
 					</div>					
