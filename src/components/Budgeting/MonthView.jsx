@@ -1,7 +1,6 @@
 import { useContext } from 'react';
 
 import { LocaleProvider } from "../../contexts/LocaleContext";
-import ExpenseEntryWriter from '../Expenses/ExpenseEntryWriter';
 import ExpenseEntry from '../Expenses/ExpenseEntry';
 import { UserData } from '../../contexts/UserData';
 import { activeInMonth } from '../../data/calendarOperations';
@@ -22,7 +21,6 @@ export default function MonthView({month,year}){
   
     return (
       <>
-        <ExpenseEntryWriter month={month} year={year}></ExpenseEntryWriter>
         <p>
           inmo month: {monthName}, year: {year}        
         </p>
