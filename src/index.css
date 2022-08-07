@@ -3,23 +3,28 @@
 @tailwind utilities;
 
 @layer base {
+  body{
+    @apply bg-slate-500
+  }
   input{
     @apply 
-      border-transparent 
+      focus-visible:border-transparent
       focus:border-transparent 
-      focus:ring-0
+      focus:ring-0;      
   }
   .basic-input {
     @apply 
+      border
       relative
-      rounded-lg
+      rounded-md
       bg-white
-      
-      py-2 pl-3 pr-2 text-left shadow-md 
+      items-center
+      mx-2
+      h-9 pl-3 pr-2 text-left      
       
       focus:outline-none 
       
-      focus-visible:border-indigo-500 
+      
       focus-visible:ring-2 
       focus-visible:ring-white 
       focus-visible:ring-opacity-75 
@@ -88,6 +93,10 @@
   }
   
 
+}
+
+#root{
+  height: 100vh;
 }
 
 body {
