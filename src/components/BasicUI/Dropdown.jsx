@@ -10,7 +10,7 @@ import { CheckIcon,SelectorIcon } from '@heroicons/react/solid'
         Icon *
 */
 
-export default function Dropdown({onChange, value, placeholder, options = []})  {
+export default function Dropdown({className, onChange, value, placeholder, options = []})  {
     
     // For array of labels that are also values, convert to objects
     if (options[0] && (typeof options[0] !== 'object' && !options[0].value) ) options = options.map(o=> ({value:o,label:o}) );
@@ -25,12 +25,17 @@ export default function Dropdown({onChange, value, placeholder, options = []})  
     const labelSync = (options?.find(o=>o.value === value))?.label || select.label || "N/A"
 
     return ( 
-        <div className=" inline-block top-16 m-2">
+        <div className={ "inline-flex basic-input "+(className||"")}>
             <Listbox value={select} onChange={handleChange} >
-                <div className="relative mt-1">
-                    <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
+                <div className="w-full h-full flex items-center">
+                    <Listbox.Button className="
+                        relative 
+                        cursor-default rounded-md 
+                        pl-3 pr-8
+                        text-left"
+                    >
                         <span className="block truncate">{ labelSync ||placeholder}</span>
-                        <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                        <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center">
                             <SelectorIcon
                                 className="h-5 w-5 text-gray-400"
                                 aria-hidden="true"

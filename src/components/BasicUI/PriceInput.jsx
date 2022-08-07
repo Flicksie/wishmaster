@@ -1,6 +1,6 @@
 import CurrToken from "../Budgeting/CurrencyToken";
 
-export default function PriceInput({validate,onChange,value,placeholder,currency}){
+export default function PriceInput({className,validate,onChange,value,placeholder,currency}){
     
     validate ??= (e) => {
         const priceIn = e.target.value;
@@ -12,8 +12,8 @@ export default function PriceInput({validate,onChange,value,placeholder,currency
     placeholder ??= "Amount"
 
     return (
-        <div className='basic-input mr-5 inline '>
-            <input className="text-right no-focus mr-1 w-12" onChange={validate} {...{value,placeholder}} />
+        <div className={'basic-input mr-1 p-2 inline-flex items-center '+(className||"")}>
+            <input className="text-right no-focus mr-1 w-14" onChange={validate} {...{value,placeholder}} />
             <CurrToken>{currency}</CurrToken>
         </div>
     )

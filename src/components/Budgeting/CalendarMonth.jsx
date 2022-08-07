@@ -42,7 +42,7 @@ export default function CalendarMonth({ year, month, selectMonth, selectedMonth 
 		<>
 			<div
 				onClick={() => selectMonth(month)}
-				className={`cursor-pointer cal-month-container rounded-md overflow-hidden w-40 h-28 shadow-md shadow-slate-200 m-1 inline-block ${(selectedMonth === month ? "bg-slate-100" :"")}`}
+				className={`bg-white cursor-pointer cal-month-container rounded-md overflow-hidden w-40 h-28 shadow-md shadow-slate-200 m-1 inline-block ${(selectedMonth === month ? "bg-slate-100" :"")}`}
 			>
 				<div className={`month-header bg-slate-500 px-2 pt-.5 pb-1 text-white font-bold ${(selectedMonth === month ? "bg-blue-900" :"")}` }>
 					{" "}

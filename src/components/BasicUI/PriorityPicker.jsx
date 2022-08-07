@@ -44,11 +44,11 @@ export default function PriorityPicker({value,onChange}){
 
 
     return (
-        <div className=" inline-block top-16 m-2 w-18 ">
+        <div className=" block mx-2 w-[120px] ">
             <Listbox value={select} onChange={handleChange} >
-                <div className="relative mt-1">
+                <div className="relative">
                     <Listbox.Button 
-                        className=" cursor-pointer relative w-full cursor-default rounded-md bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm"
+                        className=" cursor-pointer relative w-full cursor-default rounded-md bg-white h-8 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm"
                         style={ {backgroundColor: PriorityColorScale[ value-1 ]} }
                     >
                         <span className="block truncate text-slate-500" style={ { mixBlendMode: "difference"} }> Priority { value }</span>
