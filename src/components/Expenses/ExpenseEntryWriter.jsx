@@ -7,6 +7,9 @@ import ToggleSwitch from '../BasicUI/ToggleSwitch';
 import { useContext } from 'react';
 import { UserData } from '../../contexts/UserData';
 import PriceInput from '../BasicUI/PriceInput';
+import Button from '../BasicUI/Button';
+
+const monthsRange =  Object.keys([...new Array(12)]).map(x=>~~x);
 
 export default function ExpenseEntryWriter({month,year}){
   
@@ -15,14 +18,17 @@ export default function ExpenseEntryWriter({month,year}){
     const [type, setType]   = useState("expense");
     const [amount, setAmount]   = useState(0);
     const valueRef = useRef();
-    const endMonthRef = useRef();
-    const endYearRef = useRef();
+
+    const [endMonth,setEndMonth] = useState(1);
+    const [endYear,setEndYear] = useState(2022);
     //const tagsRef = useRef();
     //const currencyRef = useRef();
     const [currency, setCurrency]   = useState("PLN");
     const [confirmed, setConfirmed] = useState(false);
     const [recurring, setRecurring] = useState(false);
     const descriptionRef = useRef();
+
+    
   
     /*
     const [month, setMonth] = useState( _month || 0);
@@ -35,6 +41,7 @@ export default function ExpenseEntryWriter({month,year}){
     */
 
     const UserDataCtx = useContext(UserData);
+    const {locale} = UserDataCtx;
   
     const addItem = async (e) => {
       e.preventDefault();
@@ -49,8 +56,8 @@ export default function ExpenseEntryWriter({month,year}){
         , recurring:      recurring
         , description:    descriptionRef.current?.value || ""
         , user_uid:       UserDataCtx.id
-        , endMonth:     ~~(endMonthRef.current?.value )|| null
-        , endYear:      ~~(endYearRef.current?.value  )|| null
+        , endMonth:     ~~(endMonth)|| null
+        , endYear:      ~~(endYear )|| null
       };
 
       await addDoc( collection(db, 'calendata'), form);
@@ -72,26 +79,40 @@ export default function ExpenseEntryWriter({month,year}){
         <form onSubmit={addItem} onChange={(e)=>console.log('wawa:',e )}>
           {/* month:          <input value={month} type="number"/> */}
           {/* year:           <input value={year} type="number"/> */}
-          type:            <Dropdown name="type" onChange={setType} options={[
+          <Dropdown addClasses="w-[200px]" name="type" onChange={setType} options={[
             {label:"Expense",value:"expense"},
             {label:"Income",value:"income"}
           ]}/>
-
-          value:          <PriceInput onChange={setAmount} value={amount} currency={currency} />
+          <PriceInput onChange={setAmount} value={amount} currency={currency} />
           {/*tags:           <input ref={tagsRef}        type=""/> */}
-          currency:       <CurrencyPicker name="currency" onChange={ setCurrency } />
+          <CurrencyPicker name="currency" onChange={ setCurrency } />
           confirmed:      <ToggleSwitch  name="confirmed" onChange={ setConfirmed } />
-          recurring:      <ToggleSwitch  name="recurring" onChange={ setRecurring } />
+          <div className={`
+            relative inline-flex items-center border rounded-md
+            h-10 ${ recurring?"w-[290px]":"w-[160px]" } 
+            transition-all
+            p-2
+            box-content
+            mx-2
+          `}>
+          <ToggleSwitch  name="recurring" onChange={ setRecurring } />
           {
             recurring 
             ? <>
-                month:          <input ref={endMonthRef} type="number"/>
-                year:           <input ref={endYearRef} type="number"/>
+                <div  className='animate-fadeIn relative flex-column items-center w-fit inline-block'>
+                  <div className='flex'>
+                    <Dropdown  onChange={ setEndYear  } value={endYear} options={ [ 2022, 2023, 2024, 2025] } />
+                    <Dropdown  onChange={ setEndMonth} value={endMonth} options={ monthsRange.map(m => ({ value:m, label: new Date(1,m,1).toLocaleString(locale,{month:"long"}) }))} />
+                  </div>
+                  <small className='bg-white px-3 animate-slideRight w-auto absolute text-center block text-slate-400'>END DATE</small>
+                </div>
             </>
-            : ""
+            : <span className='ml-5'>Recurring</span>
           }
-          description:    <input name="description"  ref={descriptionRef} type=""/>
-          <button type="submit">WA</button>
+          </div>
+          <input className="basic-input" placeholder='Description'  ref={descriptionRef} type=""/>
+          <Button disabled={ ~~amount <= 0 } icon="fa-paper-plane" color="info" type="submit">WAWA</Button>
+          
         </form>
       </>
     )

@@ -12,7 +12,7 @@ import PriceInput from '../BasicUI/PriceInput';
 
 export default function WishlistEntryWriter({month,year}){
   
-    const priceRef    = useRef();
+    const urlRef         = useRef();
     const nameRef        = useRef();
  
     const descriptionRef = useRef();
@@ -53,6 +53,7 @@ export default function WishlistEntryWriter({month,year}){
           , price:          price
           , description:    descriptionRef.current?.value || ""
           , details:        detailsRef.current?.value || ""
+          , url:            urlRef.current?.value || ""
           , user_uid:       UserDataCtx.id
         }
     }
@@ -73,19 +74,16 @@ export default function WishlistEntryWriter({month,year}){
   
     return(
       <>
-        <form onSubmit={addItem}>
+        <form onSubmit={addItem} className="flex items-center border">
           {/* month:          <input value={month} type="number"/> */}
           {/* year:           <input value={year} type="number"/> */}
-          priority:           <PriorityPicker onChange={setPriority} value={priority} />
-
-          price:          <PriceInput validate={ validatePrice } onChange={ setPrice } value={ price } currency={ currency } placeholder='Price'/>
-            
-            
-
+          <input className='basic-input' ref={nameRef} type="" placeholder='Item Name'/>
+          <PriorityPicker onChange={setPriority} value={priority} />
+          <PriceInput validate={ validatePrice } onChange={ setPrice } value={ price } currency={ currency } placeholder='Price'/>
           {/*tags:           <input ref={tagsRef}        type=""/> */}
-          currency:       <CurrencyPicker value={currency}  onChange={ setCurrency } />
-          description:    <input ref={descriptionRef} type=""/>
-          name:    <input ref={nameRef} type=""/>
+          <CurrencyPicker value={currency}  onChange={ setCurrency } />
+          <input className='basic-input' ref={descriptionRef} placeholder="Item Description"/>
+          <input className='basic-input' ref={urlRef} placeholder="Item URL"/>
 
           <Button disabled={ ~~price <= 0 } icon="fa-paper-plane" color="info" type="submit">WAWA</Button>
         </form>
