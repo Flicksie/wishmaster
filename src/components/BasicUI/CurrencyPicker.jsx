@@ -8,8 +8,8 @@ const availableCurrencies = [
     {label: "US Dollar", value: "USD"},
 ]
 
-export default function CurrencyPicker({onChange,value,placeholder})  {
+export default function CurrencyPicker({className,onChange,value,placeholder})  {
     return ( 
-        <Dropdown { ...{onChange,value,placeholder} } options={availableCurrencies}/>
+        <Dropdown { ...{onChange,value,placeholder,className} } options={availableCurrencies}/>
     )
 }
