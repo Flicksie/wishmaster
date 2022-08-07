@@ -28,23 +28,25 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <UserDataProvider>
       <BrowserRouter>
-        <div className="App">
-          
-          <Navbar/>
+        <div className="App flex flex-col h-full">
+          <nav className='bg-white p-2 pb-3'>
+
+            <Navbar/>
+          </nav>
           
           <div className="content">
             <Routes>
               
               <Route path="/" element = { <Home/> }/>
-
               
-
+     
+     
               
             
             </Routes>
           </div>
 
-          <footer> *Footer goes here?* </footer> 
+          <footer className='flex bg-slate-700 text-white grow'> *Footer goes here?* </footer> 
 
         </div>      
       </BrowserRouter>   
