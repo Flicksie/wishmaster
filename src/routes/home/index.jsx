@@ -17,8 +17,9 @@ import { UserData } from '../../contexts/UserData';
 
 
 function Home() {
+  
 
-  const [screen,setScreen] = useState("WISHLIST");
+  const [screen,setScreen] = useState("CALENDAR");
 
   const UserDataCtx = useContext(UserData);
 
@@ -44,20 +45,25 @@ function Home() {
       <LocaleProvider.Provider value={{locale,setLocale}}>
       
         
-        <div className="App">
-          <header className="App-header">
-
-                    
-            <CurrencyPicker onChange={ setBaseCurrency } value={baseCurrency} placeholder="Select base currency..." />
-            <Dropdown onChange={ setYear } value={year} options={ [ 2022, 2023, 2024, 2025] } />
-            <Dropdown onChange={ selectMonth } value={selectedMonth} options={ monthsRange.map(m => ({ value:m, label: new Date(1,m,1).toLocaleString(locale,{month:"long"}) }))} />
-
-          </header>
-          <section className="container-main">
-
+        <div className="Home">
+           
+          <section className="container shadow-xl m-auto my-10 bg-purple-200 rounded-2xl ">
             
-            <Budgeting { ...{selectedMonth,selectMonth,monthsRange,year} }/>
-            <Wishlist />
+            <div className='container-head bg-purple-500 p-3 rounded-t-2xl'>
+              <CurrencyPicker className="bg-purple-100" onChange={ setBaseCurrency } value={baseCurrency} placeholder="Select base currency..." />
+              <Dropdown className="bg-purple-100" onChange={ setYear } value={year} options={ [ 2022, 2023, 2024, 2025] } />
+              <Dropdown className="bg-purple-100" onChange={ selectMonth } value={selectedMonth} options={ monthsRange.map(m => ({ value:m, label: new Date(1,m,1).toLocaleString(locale,{month:"long"}) }))} />
+            </div>
+
+            <div className='container-body flex w-full'>
+              {
+                screen === "WISHLIST"?
+                  <Wishlist />
+                : screen === "CALENDAR" ?
+                  <Budgeting { ...{selectedMonth,selectMonth,monthsRange,year} }/>
+                  : ""
+              }
+            </div>
 
                     
           </section>
